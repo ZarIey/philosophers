@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:26:18 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/12 08:03:20 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/12 09:48:12 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,53 @@ number_of_philosophers time_to_die time_to_eat time_to_sleep
 [number_of_times_each_philosopher_must_eat]
 */
 
-#include "philo.h"
+#include "./includes/philo.h"
 #include <stdlib.h>
+
+
+void	eating(pthread_mutex_t mutex, t_prog prog)
+{
+	pthread_mutex_lock(&mutex);
+	printf("HMM JE MANGE BIEN LA 🥘 🍽\n");
+	usleep(prog.time_to_eat);
+	pthread_mutex_unlock(&mutex);
+}
+
+void	sleeping(pthread_mutex_t mutex, t_prog prog)
+{
+	pthread_mutex_lock(&mutex);
+	printf("OLALA COMMENT JE ME REPOSE DE OUF SRX 🌙 😴\n");
+	usleep(prog.time_to_sleep);
+	pthread_mutex_unlock(&mutex);
+}
+
+void	thinking(pthread_mutex_t mutex, t_prog prog)
+{
+	pthread_mutex_lock(&mutex);
+	printf("JE ME POSE PLEIN DE QUESTIONS TDF❓🤯\n");
+	usleep(prog.time_to_sleep);
+	pthread_mutex_unlock(&mutex);
+}
+
+void	simple_loop(t_prog prog)
+{
+	pthread_mutex_t mutex;
+	
+	pthread_mutex_init(&mutex, NULL);
+	eating(mutex, prog);
+	sleeping(mutex, prog);
+	thinking(mutex, prog);
+	
+	// usleep(prog.time_to_eat);
+}
 
 int main (int argc, char **argv)
 {
-	t_philo philo;
+	t_prog prog;
 	if (check_errors(argc, argv))
-		exit (1);
-	arg_init(argv, philo);
+		return (1);
+	prog = prog_init(argv);
+	simple_loop(prog);
 	printf("all good\n");
-	// pthread_create(philo1, NULL);
+	return (0);
 }

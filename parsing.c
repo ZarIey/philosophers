@@ -6,11 +6,11 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 07:20:56 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/12 08:06:42 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/12 09:34:48 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "./includes/philo.h"
 
 int	is_num(char *str)
 {
@@ -26,12 +26,12 @@ int	is_num(char *str)
 	return (0);
 }
 
-int check_errors(int argc, char **argv)
+int check_errors_set(int argc, char **argv)
 {
 	int	i;
 
 	i = 1;
-	if (argc < 6)
+	if (argc != 6)
 		return (1);
 	while (argv[i])
 	{
@@ -42,11 +42,12 @@ int check_errors(int argc, char **argv)
 	return (0);
 }
 
-void	arg_init(char **argv, t_philo philo)
+int check_errors(int argc, char **argv)
 {
-	philo.number_of_philosophers = ft_atoi(argv[1]);
-	philo.time_to_die = ft_atoi(argv[2]);
-	philo.time_to_eat = ft_atoi(argv[3]);
-	philo.time_to_sleep = ft_atoi(argv[4]);
-	philo.number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
+	if (check_errors_set(argc, argv))
+	{
+		printf ("on a un soucis ! 🚔 \n");
+		return (1);
+	}
+	return (0);
 }

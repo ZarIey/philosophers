@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:45:21 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/12 08:05:06 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/12 09:12:47 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,27 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "libft.h"
 
 typedef struct s_philo
 {
-	int number_of_philosophers;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	number_of_times_each_philosopher_must_eat;
+	int	nbr_fork;
+	int	eating;
+	int sleeping;
+	int	thinking;
+	int	death;
 }	t_philo;
 
+typedef struct s_prog
+{
+	int		number_of_philosophers;
+	int		time_to_die;
+	int		time_to_eat;
+	int		time_to_sleep;
+	int		number_of_times_each_philosopher_must_eat;
+}	t_prog;
+
 int		check_errors(int argc, char **argv);
-void	arg_init(char **argv, t_philo philo);
+t_prog	prog_init(char **argv);
 
 #endif
