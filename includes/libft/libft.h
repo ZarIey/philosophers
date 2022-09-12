@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcauchet <jcauchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 16:05:39 by jcauchet          #+#    #+#             */
-/*   Updated: 2022/08/25 12:43:32 by jcauchet         ###   ########.fr       */
+/*   Updated: 2022/09/12 11:12:38 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,11 @@
 # include <errno.h>
 # include <unistd.h>
 
-extern struct global	*g_glob;
-
-typedef struct global	t_global;
-
 typedef struct s_list
 {
 	struct s_list	*next;
-	struct s_list	*next_sort;
-	void			*content;
-	int				print;
 	int				index;
-	char			*head;
-	char			linker;
-	char			*name;
-	int				q1;
-	char			*path;
-	int				q2;
-	char			*base_path;
+	void			*content;
 }	t_list;
 
 int		ft_atoi(const char *str);
@@ -73,7 +60,7 @@ void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 char	*ft_strmapi(char *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
-t_list	*ft_lstnew(char *env_choosen, int size);
+t_list	*ft_lstnew(int index);
 t_list	*ft_lstnew_void(void);
 void	ft_lstadd_front(t_list **alst, t_list *new);
 int		ft_lstsize(t_list *lst);

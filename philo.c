@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:26:18 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/12 09:48:12 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/12 11:19:00 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,67 @@ void	thinking(pthread_mutex_t mutex, t_prog prog)
 	pthread_mutex_unlock(&mutex);
 }
 
-void	simple_loop(t_prog prog)
+void routine(pthread_mutex_t mutex, t_prog prog)
 {
-	pthread_mutex_t mutex;
-	
-	pthread_mutex_init(&mutex, NULL);
 	eating(mutex, prog);
 	sleeping(mutex, prog);
 	thinking(mutex, prog);
+}
+
+t_list *creation_list(int nbr)
+{
+	int		i;
+	int		index;
+	t_list	*list;
+	t_list	*first;
+
+	i = 0;
+	index = 1;
+	list = NULL;
+	first = list;
+	while (index <= nbr)
+	{
+		list = ft_lstnew(index);		index++;
+		ft_lstadd_back(&first, list);
+	}
+	list->next = first;
+	return (first);
+}
+
+void	print_list_la(t_list *list)
+{
+	int i = 52;
+	t_list *salut;
+	salut = list;
+	while (i > 0)
+	{
+		printf ("list numero %d\n", salut->index);
+		salut = salut->next;
+		i--;
+	}
+}
+
+void	simple_loop(t_prog prog)
+{
+	t_list *list;
+	list = creation_list(prog.number_of_philosophers);
+	print_list_la(list);
 	
-	// usleep(prog.time_to_eat);
+	// pthread_mutex_t mutex;
+	
+	// if (!(pthread_mutex_init(&mutex, NULL)))
+	// 	return ;
+	// for (int i = 0; i < prog.number_of_philosophers; i++)
+	// {	
+	// 	int err = pthread_create(&threads[i], NULL, routine(mutex, prog), &mutex);
+	// 	if (err != 0) {
+	// 		printf("Echec de la création du thread: [%s]", strerror(err));
+	// 		break;
+	// 	}
+	// 	printf("Création du thread numéro %ld\n", threads[i]);
+	// }
+	// for (int i = 0; i < prog.number_of_philosophers; i++) 
+	// 	pthread_join(threads[i], NULL);
 }
 
 int main (int argc, char **argv)
@@ -83,6 +134,7 @@ int main (int argc, char **argv)
 	if (check_errors(argc, argv))
 		return (1);
 	prog = prog_init(argv);
+	// pthread_create
 	simple_loop(prog);
 	printf("all good\n");
 	return (0);

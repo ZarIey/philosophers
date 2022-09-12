@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:45:21 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/12 09:12:47 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/12 10:29:53 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_prog
 	int		time_to_sleep;
 	int		number_of_times_each_philosopher_must_eat;
 }	t_prog;
+
 
 int		check_errors(int argc, char **argv);
 t_prog	prog_init(char **argv);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcauchet <jcauchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 11:11:24 by juliencauch       #+#    #+#             */
-/*   Updated: 2022/08/15 16:45:16 by jcauchet         ###   ########.fr       */
+/*   Updated: 2022/09/12 11:11:51 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,4 @@ void	ft_lstadd_back(t_list **alst, t_list *new)
 	}
 	last = ft_lstlast(*alst);
 	last->next = new;
-	last->next_sort = new;
 }
