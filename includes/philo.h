@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:45:21 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/12 10:29:53 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/12 12:08:34 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,10 @@
 #include <unistd.h>
 #include "libft.h"
 
-typedef struct s_philo
+typedef struct s_mutex
 {
-	int	nbr_fork;
-	int	eating;
-	int sleeping;
-	int	thinking;
-	int	death;
-}	t_philo;
+	pthread_mutex_t mutex;
+}	t_mutex;
 
 typedef struct s_prog
 {
