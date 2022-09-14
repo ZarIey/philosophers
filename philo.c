@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:26:18 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/12 12:04:07 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/14 07:40:15 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,59 +38,31 @@ number_of_philosophers time_to_die time_to_eat time_to_sleep
 */
 
 #include "./includes/philo.h"
-#include <stdlib.h>
 
-
-void	eating(pthread_mutex_t mutex, t_prog prog)
-{
-	pthread_mutex_lock(&mutex);
-	printf("HMM JE MANGE BIEN LA 🥘 🍽\n");
-	usleep(prog.time_to_eat);
-	pthread_mutex_unlock(&mutex);
-}
-
-void	sleeping(pthread_mutex_t mutex, t_prog prog)
-{
-	pthread_mutex_lock(&mutex);
-	printf("OLALA COMMENT JE ME REPOSE DE OUF SRX 🌙 😴\n");
-	usleep(prog.time_to_sleep);
-	pthread_mutex_unlock(&mutex);
-}
-
-void	thinking(pthread_mutex_t mutex, t_prog prog)
-{
-	pthread_mutex_lock(&mutex);
-	printf("JE ME POSE PLEIN DE QUESTIONS TDF❓🤯\n");
-	usleep(prog.time_to_sleep);
-	pthread_mutex_unlock(&mutex);
-}
-
-void routine(pthread_mutex_t mutex, t_prog prog)
-{
-	eating(mutex, prog);
-	sleeping(mutex, prog);
-	thinking(mutex, prog);
-}
-
-void	simple_loop(t_prog prog)
-{
-	int NB_THREAD = prog.number_of_philosophers;
-	pthread_t threads[NB_THREAD];
-	pthread_mutex_t mutex;
+// void routine(pthread_mutex_t mutex, t_prog prog)
+// {
 	
-	if (!(pthread_mutex_init(&mutex, NULL)))
-		return ;
-	for (int i = 0; i < NB_THREAD; i++)
-	{
-		pthread_create(&threads[i], NULL, routine, &mutex);
-		printf("Création du thread numéro %ld\n", threads[i]);
-	}
-	for (int i = 0; i < NB_THREAD; i++) {
-		pthread_join(threads[i], NULL);
-	}
-	pthread_mutex_destroy(&mutex);
-	return 0;
-}
+// }
+
+// void	simple_loop(t_prog prog)
+// {
+// 	int NB_THREAD = prog.number_of_philosophers;
+// 	pthread_t threads[NB_THREAD];
+// 	pthread_mutex_t mutex;
+	
+// 	if (!(pthread_mutex_init(&mutex, NULL)))
+// 		return ;
+// 	for (int i = 0; i < NB_THREAD; i++)
+// 	{
+// 		pthread_create(&threads[i], NULL, routine, &mutex);
+// 		printf("Création du thread numéro %ld\n", threads[i]);
+// 	}
+// 	for (int i = 0; i < NB_THREAD; i++) {
+// 		pthread_join(threads[i], NULL);
+// 	}
+// 	pthread_mutex_destroy(&mutex);
+// 	return (0);
+// }
 
 int main (int argc, char **argv)
 {
@@ -98,7 +70,7 @@ int main (int argc, char **argv)
 	if (check_errors(argc, argv))
 		return (1);
 	prog = prog_init(argv);
-	simple_loop(prog);
+	philo_init(prog);
 	printf("all good\n");
 	return (0);
 }

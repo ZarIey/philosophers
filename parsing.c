@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 07:20:56 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/12 09:34:48 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/13 06:53:41 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int check_errors_set(int argc, char **argv)
 	int	i;
 
 	i = 1;
-	if (argc != 6)
+	if (argc < 5 || argc > 6)
 		return (1);
 	while (argv[i])
 	{

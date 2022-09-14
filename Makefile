@@ -1,6 +1,7 @@
 NAME 	= 	philo
 FILES	= 	philo	\
 			parsing	\
+			time	\
 			initialis
 
 SRCS_DIR = ./

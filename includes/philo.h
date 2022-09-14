@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:45:21 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/12 12:08:34 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/14 07:15:41 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,43 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
-#include "libft.h"
+#include <sys/time.h>
+#include "../includes/libft/libft.h"
 
-typedef struct s_mutex
-{
-	pthread_mutex_t mutex;
-}	t_mutex;
+#define FREE	0
+#define	TAKEN	1
 
 typedef struct s_prog
 {
-	int		number_of_philosophers;
-	int		time_to_die;
-	int		time_to_eat;
-	int		time_to_sleep;
-	int		number_of_times_each_philosopher_must_eat;
+	int			nbr_philo;
+	int			time_to_die;
+	int			time_to_eat;
+	int			time_to_sleep;
+	int			nbr_must_eat;
+	pthread_t	*philo_id;
 }	t_prog;
 
+typedef struct s_philo
+{
+	int				dead;
+	int				l_fork;
+	int				r_fork;
+	int				nb_eat;
+	pthread_t		id;
+	pthread_mutex_t mutex_fork;
+}	t_philo ;
+
+// parsing
 
 int		check_errors(int argc, char **argv);
 t_prog	prog_init(char **argv);
+
+// time
+
+void	time_calculator();
+
+// init
+
+void	philo_init();
 
 #endif

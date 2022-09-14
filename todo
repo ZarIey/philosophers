@@ -1,0 +1,3 @@
+struc de philo
+chacun sa fourchette en mutex
+chacun son pthread
