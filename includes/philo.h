@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:45:21 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/14 10:07:49 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/14 11:18:17 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,12 @@ typedef struct s_prog
 
 typedef struct s_philo
 {
+	int				index;
 	int				dead;
 	int				l_fork;
 	int				r_fork;
 	int				nb_eat;
-	pthread_t		id;
+	// pthread_t		id;
 	pthread_mutex_t mutex_fork;
 }	t_philo ;
 
