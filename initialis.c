@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 09:03:16 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/14 11:21:32 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/14 14:11:16 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,33 +24,22 @@ void	*routine(void *arg)
 	// while (i > 0)
 	// {
 		// printf("salut a toi %s de pid %ld\n", arg, );
-	while (1) {
-		printf("salut a toi, id de ce philo est %d\n", philo->index);
+	while (1) 
+	{
+		printf("salut a toi, l'id de ce philo est %d\n", philo->index);
 		usleep(500000 * philo->index);
 	}
 	// 	i--;
 	// }
-	printf("ye fini\n");
 //	pthread_mutex_unlock(&philo->mutex_fork);
 	return (NULL);
 }
 
-void	philo_init(t_prog prog)
+t_philo *philo_assignement(t_philo *philo_base, int nb_thread, int i)
 {
-	int	i;
-	int nb_thread;
-	t_philo *philo;
-	pthread_t *th;
+	t_philo	*philo;
 
-	i = 0;
-	nb_thread = prog.nbr_philo;
-	// malloc structure que tu vas envoyer
-	philo = malloc(sizeof(t_philo) * nb_thread);
-
-	// malloc tableau de thread
-	th = malloc(sizeof(pthread_t) * nb_thread);
-
-	// initialise chaque structure de philo
+	philo = philo_base;
 	while (i < nb_thread)
 	{
 		philo[i].index = i + 1;
@@ -62,31 +51,41 @@ void	philo_init(t_prog prog)
 	//	printf("Yo les poules\n");
 		i++;
 	}
+	return(philo_base);
+}
 
-	//create thread
-	i = 0;
+void create_and_detach(t_prog prog, t_philo *philo, int nb_thread, int i)
+{
 	while (i < nb_thread)
 	{
-		pthread_create(&th[i], NULL, &routine, &philo[i]);
+		pthread_create(&prog.philo_id[i], NULL, routine, &philo[i]);
 		i++;
 	}
-
-	// detach thread
 	i = 0;
 	while (i < nb_thread)
 	{
-		pthread_detach(th[i]);
+		pthread_detach(prog.philo_id[i]);
 		i++;
 	}
 	while (1);
 }
 
+void	philo_init(t_prog prog)
+{
+	int nb_thread;
+	t_philo *philo;
+	
+	nb_thread = prog.nbr_philo;
+	philo = malloc(sizeof(t_philo) * nb_thread);
+	philo = philo_assignement(philo, nb_thread, 0);
+	create_and_detach(prog, philo, nb_thread, 0);
+}
+
 t_prog	prog_init(char **argv)
 {
-	t_prog prog;
+	t_prog		prog;
+
 	prog.nbr_philo = ft_atoi(argv[1]);
-	// if (!(prog.philo_id = malloc(sizeof(pthread_t) * prog.nbr_philo)))
-	// 	return (prog);
 	prog.time_to_die = ft_atoi(argv[2]);
 	prog.time_to_eat = ft_atoi(argv[3]);
 	prog.time_to_sleep = ft_atoi(argv[4]);
