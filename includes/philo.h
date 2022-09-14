@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:45:21 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/14 07:15:41 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/14 10:07:49 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_prog
 	int			time_to_eat;
 	int			time_to_sleep;
 	int			nbr_must_eat;
-	pthread_t	*philo_id;
+	//pthread_t	*philo_id;
 }	t_prog;
 
 typedef struct s_philo
