@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 09:03:16 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/14 10:26:05 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/14 10:29:24 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ void	philo_init(t_prog prog)
 		philo[i].nb_eat = 0;
 		pthread_create(&philo[i].id, NULL, routine, &philo[i]);
 		i = 0;
-		while (i < nb_thread)
-		{
-			pthread_join(philo[i].id, NULL);
-			i++;
-		}
 	//	pthread_mutex_destroy(&philo[i].mutex_fork);
 	//	printf("Yo les poules\n");
+		i++;
+	}
+	while (i < nb_thread)
+	{
+		pthread_join(philo[i].id, NULL);
 		i++;
 	}
 }
