@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:45:21 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/15 08:40:36 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/19 13:47:19 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,15 @@
 
 typedef struct s_prog
 {
-	int			nbr_philo;
-	int			time_to_die;
-	int			time_to_eat;
-	int			time_to_sleep;
-	int			nbr_must_eat;
-	int			eat_specified;
-	pthread_t	*philo_id;
+	int				nbr_philo;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				nbr_must_eat;
+	int				eat_specified;
+	int				dead;
+	pthread_t		*philo_id;
+	pthread_mutex_t	fork[500];
 }	t_prog;
 
 typedef struct s_philo
@@ -41,6 +43,7 @@ typedef struct s_philo
 	int				l_fork;
 	int				r_fork;
 	int				nb_eat;
+	int				last_meal;
 	t_prog			prog_in;
 	pthread_mutex_t mutex_fork;
 }	t_philo ;

@@ -6,27 +6,52 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 09:03:16 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/15 08:40:59 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/19 13:55:43 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/philo.h"
 
+
+void mutex_security(t_prog prog, t_philo philo, int flag)
+{
+	if (!flag)
+	{	
+		pthread_mutex_lock(&prog.fork[philo.l_fork]);
+		printf("%d %d has taking a fork\n", time_calculator(), philo.index);
+		pthread_mutex_lock(&prog.fork[philo.r_fork]);
+		printf("%d %d has taking a fork\n", time_calculator(), philo.index);	
+		return ;
+	}
+	pthread_mutex_unlock(&prog.fork[philo.l_fork]);
+	pthread_mutex_unlock(&prog.fork[philo.r_fork]);
+}
+
+void	eating(t_prog prog, t_philo philo)
+{
+	mutex_security(prog, philo, 0);
+	printf("%d %d is eating\n", time_calculator(), philo.index);
+	usleep(philo.prog_in.time_to_eat);
+	mutex_security(prog, philo, 1);
+}
+
 void	*routine(void *arg)
 {
 	t_philo *philo;
+	t_prog	prog;
 	
 	philo = (t_philo *)arg;
-	// int i = 0;
-	while (philo->nb_eat < philo->prog.nbr_must_eat)
+	prog = philo->prog_in;
+	while (!(prog.dead))
 	{
-		printf("%d %d is eating\n", time_calculator(), philo->index);
+		eating(prog, *philo);
+		philo->last_meal = time_calculator();
 		philo->nb_eat++;
-		usleep(philo->prog.time_to_eat);
-		printf("%d %d is thinking\n", time_calculator(), philo->index);
-		usleep(250000);
+		if (philo->nb_eat == prog.nbr_must_eat)
+			break ;
 		printf("%d %d is sleeping\n", time_calculator(), philo->index);
-		usleep(philo->prog.time_to_sleep);
+		usleep(philo->prog_in.time_to_sleep);
+		printf("%d %d is thinking\n", time_calculator(), philo->index);
 	}
 	return (NULL);
 }
@@ -59,7 +84,7 @@ t_philo *philo_assignement(t_prog prog, t_philo *philo_base, int nb_thread, int 
 
 void create_and_detach(t_prog prog, t_philo *philo, int nb_thread, int i)
 {
-	while (philo->nb_eat < philo->prog.nbr_must_eat)
+	while (philo->nb_eat < philo->prog_in.nbr_must_eat)
 	{		
 		while (i < nb_thread)
 		{
@@ -93,11 +118,7 @@ void	philo_init(t_prog prog)
 	nb_thread = prog.nbr_philo;
 	philo = malloc(sizeof(t_philo) * nb_thread);
 	philo = philo_assignement(prog, philo, nb_thread, 0);
-	if (prog.eat_specified)
-		create_and_detach(prog, philo, nb_thread, 0);
-	else 
-		test_test(prog, philo, nb_thread, 0);
-	// mutex_init(philo, nb_tread, 0);
+	create_and_detach(prog, philo, nb_thread, 0);
 }
 
 t_prog	prog_init(char **argv)

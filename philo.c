@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:26:18 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/14 13:53:19 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/19 13:48:38 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int main (int argc, char **argv)
 	prog = prog_init(argv);
 	prog.philo_id = thread_tab(prog.nbr_philo);
 	philo_init(prog);
+	
 	printf("all good\n");
 	return (0);
 }
