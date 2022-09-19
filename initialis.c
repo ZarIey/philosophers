@@ -6,12 +6,11 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 09:03:16 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/19 13:55:43 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/19 14:30:06 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/philo.h"
-
 
 void mutex_security(t_prog prog, t_philo philo, int flag)
 {
@@ -56,14 +55,6 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-// void	mutex_init(t_philo *philo, int nb_thread, int i)
-// {
-// 	while (i < nb_thread)
-// 	{
-// 		mutex_init
-// 	}
-// }
-
 t_philo *philo_assignement(t_prog prog, t_philo *philo_base, int nb_thread, int i)
 {
 	t_philo	*philo;
@@ -102,14 +93,6 @@ void create_and_detach(t_prog prog, t_philo *philo, int nb_thread, int i)
 	return;
 }
 
-// void useless_fonction_ptdr_jsuis_une_galere_moi()
-// {
-// 	ceci est une fonction inutile;
-// 	sert a rien;
-// 	jpep;
-// 	return (qqchose);
-// }
-
 void	philo_init(t_prog prog)
 {
 	int nb_thread;
@@ -131,14 +114,8 @@ t_prog	prog_init(char **argv)
 	prog.time_to_sleep = ft_atoi(argv[4]);
 	prog.eat_specified = 0;
 	if (argv[5])
-	{
 		prog.nbr_must_eat = ft_atoi(argv[5]);
-		prog.eat_specified = 1;
-	}
 	else 
-	{
 		prog.nbr_must_eat = 999999999;
-		prog.eat_specified = 0;	
-	}
 	return (prog);
 }
