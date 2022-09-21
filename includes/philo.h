@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:45:21 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/19 14:38:20 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/22 01:02:02 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ typedef struct s_prog
 	int				eat_specified;
 	int				dead;
 	pthread_t		*philo_id;
-	pthread_mutex_t	*fork;
+	pthread_mutex_t	fork[500];
+	pthread_mutex_t	print;
 }	t_prog;
 
 typedef struct s_philo

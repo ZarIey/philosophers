@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 09:03:16 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/19 14:30:06 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/22 01:18:03 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	*routine(void *arg)
 	prog = philo->prog_in;
 	while (!(prog.dead))
 	{
+	//	pthread_mutex_lock(&prog.print);
 		eating(prog, *philo);
 		philo->last_meal = time_calculator();
 		philo->nb_eat++;
@@ -51,6 +52,7 @@ void	*routine(void *arg)
 		printf("%d %d is sleeping\n", time_calculator(), philo->index);
 		usleep(philo->prog_in.time_to_sleep);
 		printf("%d %d is thinking\n", time_calculator(), philo->index);
+	//	pthread_mutex_unlock(&prog.print);
 	}
 	return (NULL);
 }
