@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 02:07:00 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/22 05:55:57 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/22 06:39:15 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,31 +45,3 @@ void death_trigger(t_prog prog, t_philo *philo)
 		}
 	}
 }
-
-// void	death_checker(t_rules *r, t_philosopher *p)
-// {
-// 	int i;
-
-// 	while (!(r->all_ate))
-// 	{
-// 		i = -1;
-// 		while (++i < r->nb_philo && !(r->dieded))
-// 		{
-// 			pthread_mutex_lock(&(r->meal_check));
-// 			if (time_diff(p[i].t_last_meal, timestamp()) > r->time_death)
-// 			{
-// 				action_print(r, i, "died");
-// 				r->dieded = 1;
-// 			}
-// 			pthread_mutex_unlock(&(r->meal_check));
-// 			usleep(100);
-// 		}
-// 		if (r->dieded)
-// 			break ;
-// 		i = 0;
-// 		while (r->nb_eat != -1 && i < r->nb_philo && p[i].x_ate >= r->nb_eat)
-// 			i++;
-// 		if (i == r->nb_philo)
-// 			r->all_ate = 1;
-// 	}
-// }

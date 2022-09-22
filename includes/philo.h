@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:45:21 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/22 05:12:43 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/22 07:14:11 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 #define	TAKEN		1
 #define	INFINITE	MAX_LONG
 
+struct s_philo;
+
 typedef struct s_prog
 {
 	int				nbr_philo;
@@ -34,6 +36,7 @@ typedef struct s_prog
 	int				eat_specified;
 	int				dead;
 	long			start;
+	struct s_philo	*tab_philo;
 	pthread_t		*philo_id;
 	pthread_mutex_t	fork[500];
 	pthread_mutex_t	print;
@@ -49,7 +52,7 @@ typedef struct s_philo
 	int				nb_eat;
 	int				last_meal;
 	t_prog			prog_in;
-}	t_philo ;
+}	t_philo;
 
 // parsing
 
@@ -64,7 +67,7 @@ int	time_diff(t_prog prog, t_philo philo, int time2);
 
 // init
 
-t_philo	*philo_init(t_prog prog);
+void	philo_init(t_prog prog);
 
 // death
 

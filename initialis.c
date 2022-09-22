@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 09:03:16 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/22 06:01:41 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/22 07:00:40 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	im_printing(t_prog prog, t_philo philo, long int time, char *sentence)
 	if (!prog.dead)
 	{
 		pthread_mutex_lock(&prog.print);
-		printf("%ld %d %s\n", (time - philo.prog_in.start), philo.index, sentence);
+		printf("%ld %d %s\n", (time - prog.start), philo.index, sentence);
 		pthread_mutex_unlock(&prog.print);
 	}
 		
@@ -39,17 +39,17 @@ void mutex_security(t_prog prog, t_philo philo, int flag)
 	pthread_mutex_unlock(&prog.fork[philo.r_fork]);
 }
 
-void	eating(t_prog prog, t_philo philo)
+void	eating(t_prog prog, t_philo *philo)
 {
-	mutex_security(prog, philo, 0);
-	im_printing(prog, philo, time_calculator(), "is eating");
+	mutex_security(prog, *philo, 0);
+	im_printing(prog, *philo, time_calculator(), "is eating");
 	// printf("%d %d is eating\n", time_calculator(), philo.index);
 	// printf("AHHHHHHHHHH %d\n", prog.time_to_eat);
-	philo.last_meal = time_calculator();
-	// printf("AV %ld\n", time_calculator());
-	usleep(prog.time_to_eat * 100);
-	// printf("AP %ld de %d\n", time_calculator(), prog.time_to_eat);
-	mutex_security(prog, philo, 1);
+	philo->last_meal = time_calculator();
+	 printf("AV %ld\n", time_calculator());
+	usleep(prog.time_to_eat);
+	 printf("AP %ld de %d\n", time_calculator(), prog.time_to_eat);
+	mutex_security(prog, *philo, 1);
 }
 
 void	*routine(void *arg)
@@ -61,7 +61,7 @@ void	*routine(void *arg)
 	prog = philo->prog_in;
 	while (!(prog.dead))
 	{
-		eating(prog, *philo);
+		eating(prog, philo);
 		philo->nb_eat++;
 		if (philo->nb_eat == prog.nbr_must_eat)
 			break ;
@@ -109,7 +109,7 @@ void create_and_detach(t_prog prog, t_philo *philo, int nb_thread, int i)
 	return;
 }
 
-t_philo	*philo_init(t_prog prog)
+void	philo_init(t_prog prog)
 {
 	int nb_thread;
 	t_philo *philo;
@@ -117,8 +117,8 @@ t_philo	*philo_init(t_prog prog)
 	nb_thread = prog.nbr_philo;
 	philo = malloc(sizeof(t_philo) * nb_thread);
 	philo = philo_assignement(prog, philo, nb_thread, 0);
+	prog.tab_philo = philo;
 	create_and_detach(prog, philo, nb_thread, 0);
-	return (philo);
 }
 
 t_prog	prog_init(char **argv)

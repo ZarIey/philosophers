@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:26:18 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/22 05:46:58 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/22 07:00:28 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,14 @@ void	destroy_mutex(t_prog prog)
 int main (int argc, char **argv)
 {
 	t_prog prog;
-	t_philo *philo;
 	if (check_errors(argc, argv))
 		return (1);
 	prog = prog_init(argv);
 	prog.philo_id = thread_tab(prog.nbr_philo);
 //	prog.fork = mutex_tab(prog.nbr_philo);
 	init_tab_mutex(prog);
-	philo = philo_init(prog);
-	death_trigger(prog, philo);
+	philo_init(prog);
+	death_trigger(prog, prog.tab_philo);
 	destroy_mutex(prog);
 	// printf("all good\n");
 	return (0);
