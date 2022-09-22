@@ -2,6 +2,7 @@ NAME 	= 	philo
 FILES	= 	philo	\
 			parsing	\
 			time	\
+			death	\
 			initialis
 
 SRCS_DIR = ./
