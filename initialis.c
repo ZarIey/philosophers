@@ -6,17 +6,21 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 09:03:16 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/22 03:12:19 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/22 06:01:41 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/philo.h"
 
-void	im_printing(t_philo philo, int time, char *sentence)
+void	im_printing(t_prog prog, t_philo philo, long int time, char *sentence)
 {
-		pthread_mutex_lock(&philo.prog_in.print);
-		printf("%d %d %s\n", time, philo.index, sentence);
-		pthread_mutex_unlock(&philo.prog_in.print);
+	if (!prog.dead)
+	{
+		pthread_mutex_lock(&prog.print);
+		printf("%ld %d %s\n", (time - philo.prog_in.start), philo.index, sentence);
+		pthread_mutex_unlock(&prog.print);
+	}
+		
 }
 
 void mutex_security(t_prog prog, t_philo philo, int flag)
@@ -24,10 +28,10 @@ void mutex_security(t_prog prog, t_philo philo, int flag)
 	if (!flag)
 	{	
 		pthread_mutex_lock(&prog.fork[philo.l_fork]);
-		im_printing(philo, time_calculator(), "has taking a fork");
+		im_printing(prog, philo, time_calculator(), "has taking a fork");
 		// printf("%d %d has taking a fork\n", time_calculator(), philo.index);
 		pthread_mutex_lock(&prog.fork[philo.r_fork]);
-		im_printing(philo, time_calculator(), "has taking a fork");
+		im_printing(prog, philo, time_calculator(), "has taking a fork");
 		// printf("%d %d has taking a fork\n", time_calculator(), philo.index);	
 		return ;
 	}
@@ -38,9 +42,13 @@ void mutex_security(t_prog prog, t_philo philo, int flag)
 void	eating(t_prog prog, t_philo philo)
 {
 	mutex_security(prog, philo, 0);
-	im_printing(philo, time_calculator(), "is eating");
+	im_printing(prog, philo, time_calculator(), "is eating");
 	// printf("%d %d is eating\n", time_calculator(), philo.index);
-	usleep(philo.prog_in.time_to_eat);
+	// printf("AHHHHHHHHHH %d\n", prog.time_to_eat);
+	philo.last_meal = time_calculator();
+	// printf("AV %ld\n", time_calculator());
+	usleep(prog.time_to_eat * 100);
+	// printf("AP %ld de %d\n", time_calculator(), prog.time_to_eat);
 	mutex_security(prog, philo, 1);
 }
 
@@ -54,14 +62,13 @@ void	*routine(void *arg)
 	while (!(prog.dead))
 	{
 		eating(prog, *philo);
-		philo->last_meal = time_calculator();
 		philo->nb_eat++;
 		if (philo->nb_eat == prog.nbr_must_eat)
 			break ;
-		im_printing(*philo, time_calculator(), "is sleeping");
+		im_printing(prog, *philo, time_calculator(), "is sleeping");
 		// printf("%d %d is sleeping\n", time_calculator(), philo->index);
 		usleep(philo->prog_in.time_to_sleep);
-		im_printing(*philo, time_calculator(), "is thinking");
+		im_printing(prog, *philo, time_calculator(), "is thinking");
 		// printf("%d %d is thinking\n", time_calculator(), philo->index);
 	}
 	return (NULL);
@@ -122,6 +129,7 @@ t_prog	prog_init(char **argv)
 	prog.time_to_die = ft_atoi(argv[2]);
 	prog.time_to_eat = ft_atoi(argv[3]);
 	prog.time_to_sleep = ft_atoi(argv[4]);
+	prog.start = time_calculator();
 	if (argv[5])
 		prog.nbr_must_eat = ft_atoi(argv[5]);
 	else 

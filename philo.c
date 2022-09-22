@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:26:18 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/22 03:23:41 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/22 05:46:58 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,6 @@ int main (int argc, char **argv)
 	philo = philo_init(prog);
 	death_trigger(prog, philo);
 	destroy_mutex(prog);
-	printf("all good\n");
+	// printf("all good\n");
 	return (0);
 }

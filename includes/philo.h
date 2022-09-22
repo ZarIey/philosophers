@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 06:45:21 by ctardy            #+#    #+#             */
-/*   Updated: 2022/09/22 03:02:47 by ctardy           ###   ########.fr       */
+/*   Updated: 2022/09/22 05:12:43 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_prog
 	int				end_eat;
 	int				eat_specified;
 	int				dead;
+	long			start;
 	pthread_t		*philo_id;
 	pthread_mutex_t	fork[500];
 	pthread_mutex_t	print;
@@ -53,12 +54,12 @@ typedef struct s_philo
 // parsing
 
 int		check_errors(int argc, char **argv);
-void	im_printing(t_philo philo, int time, char *sentence);
+void	im_printing(t_prog prog, t_philo philo, long int time, char *sentence);
 t_prog	prog_init(char **argv);
 
 // time
 
-int	time_calculator();
+long	time_calculator();
 int	time_diff(t_prog prog, t_philo philo, int time2);
 
 // init
