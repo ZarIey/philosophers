@@ -1,9 +1,6 @@
 NAME 	= 	philo
 FILES	= 	philo	\
 			parsing	\
-			time	\
-			death	\
-			initialis
 
 SRCS_DIR = ./
 SRCS = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(FILES)))
