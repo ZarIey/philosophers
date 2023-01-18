@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 12:27:23 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/18 16:44:03 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/01/18 18:49:55 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	destroy_mutex(t_prog *prog)
 	int i;
 	
 	i = 0;
+//	printf("PUTAIIIIIIIIIIIIIIIIN\n");
 	while (i < prog->nbr_philo)
 	{
 		pthread_mutex_destroy(&prog->fork[i]);
@@ -43,34 +44,38 @@ void	destroy_mutex(t_prog *prog)
 	pthread_mutex_destroy(&prog->is_alive);
 }
 
-int	time_diff(t_prog prog, t_philo philo, int time2)
-{
-	int	result;
-	//(void)prog;
-//	printf("OUAIS JE RENTRE LA OOH\n");
-//	printf("VALEUR DE LAST MEAL %d\n", philo.last_meal);
-//	printf("VALEUR DE NOW %d\n", time2);
-	result = time2 - philo.last_meal;
-	if (result > prog.time_to_die)
-	 	return (1);
-	return (result);
-}
+// int	time_diff(t_prog prog, t_philo philo, int time2)
+// {
+// 	int	result;
+// 	//(void)prog;
+// //	printf("OUAIS JE RENTRE LA OOH\n");
+// //	printf("VALEUR DE LAST MEAL %d\n", philo.last_meal);
+// //	printf("VALEUR DE NOW %d\n", time2);
+// 	result = time2 - philo.last_meal;
+// 	if (result > prog.time_to_die)
+// 	 	return (1);
+// 	return (result);
+// }
 
 void	im_printing(t_prog *prog, t_philo philo, long int time, char *sentence)
 {
-	if (!prog->dead)
-	{
 		pthread_mutex_lock(&prog->print);
 		printf("%ld %d %s\n", (time - prog->start), philo.index, sentence);
+		if (prog->dead)
+		{
+			my_usleep(150);
+			pthread_mutex_unlock(&philo.prog_in->stop);
+			return ;
+		}
 		pthread_mutex_unlock(&prog->print);
-	}
-		
 }
 
 void death_trigger(t_prog *prog, t_philo *philo)
 {
 	int i;
+	long int	time_new;
 
+	time_new = time_calculator();
 	i = 0;
 	//printf("OUIIIIIIIIIIIIIII %d\n", (time_diff(prog, philo[i], time_calculator())));
 	if (!prog->end_eat)
@@ -78,30 +83,24 @@ void death_trigger(t_prog *prog, t_philo *philo)
 		if (!prog->dead && i < prog->nbr_philo)
 		{
 			pthread_mutex_lock(&(prog->is_alive));
-			if (prog->time_to_die + philo->last_meal <= time_calculator())
+			if (prog->time_to_die + philo->last_meal <= time_new)
 			{
 				// printf("%ld %d %s\n", (time_calculator() - prog->start), philo[i].index, "died");
-				im_printing(prog, philo[i], time_calculator(), "died");
-				pthread_mutex_lock(&prog->print);
-				pthread_mutex_unlock(&philo->prog_in->stop);
+				prog->dead = 1;
+				im_printing(prog, philo[i], time_new, "died");
+				// pthread_mutex_lock(&prog->print);
+			//	printf("CA IMPRIME PLU\n");
 				//pthread_mutex_unlock(&prog->print);
-				// prog->dead = 1;
 			}
 			pthread_mutex_unlock(&(prog->is_alive));
 			i++;
 		}
 		if (prog->dead)
 			return ;
-		i = 0;
-		if (prog->nbr_must_eat != -1 && i < prog->nbr_philo && philo[i].nb_eat == prog->nbr_must_eat)
-			i++;
+		// i = 0;
 	//	printf("%d\n", i);
-		if (i == prog->nbr_philo)
-		{
-			// write(1, "OH PUTAING\n", 11);
-			prog->end_eat = 1;
-		}
 	}
+	//printf("coucou a tosu et a totu\n");
 }
 
 void mutex_security(t_prog *prog, t_philo philo, int flag)
@@ -138,7 +137,9 @@ void	eating(t_prog *prog, t_philo *philo)
 void	*routine(void *arg)
 {
 	t_philo *philo;
+	int		count_philo;
 	
+	count_philo = 0;
 	philo = (t_philo *)arg;
 	
 	if (philo->index % 2 == 0)
@@ -146,17 +147,29 @@ void	*routine(void *arg)
 	while (!(philo->prog_in->dead))
 	{
 		death_trigger(philo->prog_in, philo);
+		//printf("ARRETE TOI\n");
 		eating(philo->prog_in, philo);
 		philo->nb_eat++;
-		//printf("Nombre de repas : %d de %d\n", philo->nb_eat, philo->index);
+		//printf("LE NBR DE EAT LAAAA %d\n", philo->nb_eat);
 		if (philo->nb_eat == philo->prog_in->nbr_must_eat)
-			break ;
+		{
+			philo->prog_in->count_philo_rassasied++;
+			if (philo->prog_in->count_philo_rassasied == philo->prog_in->nbr_philo)
+			{
+				pthread_mutex_lock(&philo->prog_in->print);
+				my_usleep(150);
+				printf("OLALA ON A TOUS BIEN MANGER %d REPAS CHACUN LA \n", philo->prog_in->nbr_must_eat);
+				pthread_mutex_unlock(&philo->prog_in->stop);
+			}
+						
+		}
 		im_printing(philo->prog_in, *philo, time_calculator(), "is sleeping");
 		// printf("%d %d is sleeping\n", time_calculator(), philo->index);
 		my_usleep(philo->prog_in->time_to_sleep);
 		im_printing(philo->prog_in, *philo, time_calculator(), "is thinking");
 		// printf("%d %d is thinking\n", time_calculator(), philo->index);
 	}
+		//printf("------------ Nombre de repas : %d de %d\n", philo->nb_eat, philo->index);
 	return (NULL);
 }
 
@@ -164,7 +177,7 @@ void create_and_detach(t_prog *prog, t_philo *philo, int nb_thread, int i)
 {
 	while (i < nb_thread)
 	{
-		philo[i].last_meal = time_calculator();
+		//philo[i].last_meal = time_calculator();
 		//printf("Valeur de last meal : %d\n", philo[i].last_meal);
 		pthread_create(&prog->philo_id[i], NULL, routine, &philo[i]);
 		//death_trigger(prog, philo);
@@ -261,6 +274,7 @@ t_prog	prog_init(char **argv)
 	prog.time_to_eat = ft_atoi(argv[3]);
 	prog.time_to_sleep = ft_atoi(argv[4]);
 	prog.start = time_calculator();
+	prog.count_philo_rassasied = 0;
 	if (argv[5])
 		prog.nbr_must_eat = ft_atoi(argv[5]);
 	else 
@@ -281,11 +295,11 @@ int main (int argc, char **argv)
 	pthread_mutex_init(&prog.stop, NULL);
 	pthread_mutex_lock(&prog.stop);
 	pthread_mutex_lock(&prog.stop);
-	//death_trigger(prog, prog->tab_philo);
-	//exit(0);
+	printf("HEYYYYY\n");
 	free(prog.philo_id);
 	free(prog.fork);
 	destroy_mutex(&prog);
+	//system(leaks);
 	return (0);
 }
 
