@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 07:20:56 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/17 12:10:50 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/01/20 18:01:56 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int check_errors_set(int argc, char **argv)
 	i = 1;
 	if (argc < 5 || argc > 6)
 		return (1);
-	if ((ft_atoi(argv[1]) <= 1) || (ft_atoi(argv[2]) < 1) || (ft_atoi(argv[3]) < 1) || (ft_atoi(argv[4]) < 1))
+	if ((ft_atoi(argv[1]) < 1) || (ft_atoi(argv[2]) <= 1) || (ft_atoi(argv[3]) <= 1) || (ft_atoi(argv[4]) <= 1))
 		return (1);
 	while (argv[i])
 	{
@@ -48,7 +48,7 @@ int check_errors(int argc, char **argv)
 {
 	if (check_errors_set(argc, argv))
 	{
-		printf ("on a un soucis ! 🚔 \n");
+		printf ("On a un soucis d'arguments ! 🚔 \n");
 		return (1);
 	}
 	return (0);
