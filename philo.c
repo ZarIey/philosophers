@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 12:27:23 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/20 19:42:33 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/01/22 13:53:07 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,9 +323,10 @@ int main (int argc, char **argv)
 	if (check_errors(argc, argv))
 		return (1);
 	prog = prog_init(argv);
-	prog.fork = mutex_init(&prog);
+	//prog.fork = mutex_init(&prog);
 	//pthread_mutex_init(&prog.stop, NULL);
-	prog.philo_id = thread_tab(prog.nbr_philo);
+	//prog.philo_id = thread_tab(prog.nbr_philo);
+	//prog.philo_id = ft_calloc(500, sizeof(pthread_t));
 	philo_init(&prog);
 	//printf("valeur de prog->dead %d\n", prog->dead);
 	int i = 0;
