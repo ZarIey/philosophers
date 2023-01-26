@@ -6,27 +6,11 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 12:27:23 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/26 14:46:49 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/01/26 19:56:04 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/philo.h"
-
-
-// // int	time_diff(t_prog prog, t_philo philo, int time2)
-// // {
-// // 	int	result;
-// // 	//(void)prog;
-// // //	printf("OUAIS JE RENTRE LA OOH\n");
-// // //	printf("VALEUR DE LAST MEAL %d\n", philo.last_meal);
-// // //	printf("VALEUR DE NOW %d\n", time2);
-// // 	result = time2 - philo.last_meal;
-// // 	if (result > prog.time_to_die)
-// // 	 	return (1);
-// // 	return (result);
-// // }
-
-
 
 long	time_calculator()
 {
@@ -50,35 +34,17 @@ void	im_printing(t_prog *prog, t_philo *philo, char *sentence)
 		printf("%ld %d %s\n", (time_calculator() - prog->start), philo->index, sentence);
 		pthread_mutex_unlock(&prog->mutexes[PRINT]);
 }
-/* void	*ft_simulation(void *arg)
-{
-	t_philo	*self;
 
-	self = (t_philo *) arg;
-	if (self->id % 2 == 0)
-	{
-		ft_print (self, "is thinking");
-		ft_msleep (self->data->time_eat);
-	}
-	while (1)
-	{
-		if (ft_check_died(self))
-			break ;
-		if (ft_eating (self) != SUCCESS)
-			break ;
-		ft_print (self, "is thinking");
-		ft_msleep (self->data->time_thk);
-	}
-	return (NULL);
-} */
 void mutex_security(t_prog *prog, t_philo *philo, int flag)
 {
 	if (!flag)
 	{	
 		pthread_mutex_lock(&philo->fork[philo->l_fork]);
 		im_printing(prog, philo, "has taken a fork");
+		printf("philo %d fork gauche n. %d\n",philo->index, philo->l_fork);
 		pthread_mutex_lock(&philo->fork[philo->r_fork]);
 		im_printing(prog, philo, "has taken a fork");
+		printf("philo %d fork droite n. %d\n",philo->index, philo->r_fork);
 		return ;
 	}
 	pthread_mutex_unlock(&philo->fork[philo->l_fork]);
@@ -94,18 +60,59 @@ int	check_meal_count(t_philo *philo)
 
 void	eating(t_prog *prog, t_philo *philo)
 {
-	// 	}
-	// }
 	mutex_security(prog, philo, 0);
 	//printf ("Philo %d fourchette gauche : %d et droite : %d\n", philo->index, philo->l_fork, philo->r_fork);
 	pthread_mutex_lock(&philo->prog_in->mutexes[EAT]);
 	im_printing(prog, philo, "is eating");
-	my_usleep(prog->time_to_eat);
-	pthread_mutex_unlock(&philo->prog_in->mutexes[EAT]);
 	philo->last_meal = time_calculator();
 	philo->nb_eat++;
-	printf("Philo %d eat %d times\n", philo->index, philo->nb_eat);
+	pthread_mutex_unlock(&philo->prog_in->mutexes[EAT]);
+//	printf("Philo %d eat %d times\n", philo->index, philo->nb_eat);
+	my_usleep(prog->time_to_eat);
 	mutex_security(prog, philo, 1);
+}
+
+int death_trigger(t_prog *prog, t_philo *philo)
+{
+	int i;
+	long int last_meal;
+
+	i = 0;
+	while ("Drill")
+	{
+		pthread_mutex_lock(&prog->mutexes[EAT]);
+		last_meal = philo[i].last_meal;
+		pthread_mutex_unlock(&prog->mutexes[EAT]);
+		if (philo->prog_in->count_philo_rassasied >= philo->prog_in->nbr_philo)
+		{
+			printf("OLALA ON A TOUS MANGER %d REPAS LA HMMM\n", philo->prog_in->nbr_must_eat);
+			break ;
+		}
+		if (last_meal && time_calculator() - last_meal > prog->time_to_die)
+		{
+			pthread_mutex_lock (&prog->mutexes[DIE]);
+			prog->dead = 1;
+			im_printing(prog, &philo[i], "died");
+			pthread_mutex_unlock (&prog->mutexes[DIE]);
+			break ;
+		}
+		i = (i + 1) % prog->nbr_philo;
+		usleep (200);
+	}
+	return (OK);
+}
+
+int check_if_dead(t_prog *prog)
+{
+	pthread_mutex_lock(&prog->mutexes[DIE]);
+	if (prog->dead)
+	{
+	//	printf("check de la mort en positif\n");
+		pthread_mutex_unlock(&prog->mutexes[DIE]);
+		return (ERROR);
+	}
+	pthread_mutex_unlock(&prog->mutexes[DIE]);
+	return (OK);
 }
 
 void	*routine(void *philo_arg)
@@ -117,23 +124,24 @@ void	*routine(void *philo_arg)
 		my_usleep(philo->prog_in->time_to_eat);
 	while ("Drill")
 	{
-		// death_trigger();
-		eating(philo->prog_in, philo);
-		if (check_meal_count(philo))
+		if (check_if_dead(philo->prog_in))
 		{
-		//	pthread_mutex_lock((&philo->prog_in->mutexes[RASSASIED]));
-			philo->prog_in->count_philo_rassasied++;
-		//	pthread_mutex_unlock((&philo->prog_in->mutexes[RASSASIED]));
-			if (philo->prog_in->count_philo_rassasied >= philo->prog_in->nbr_philo)
-				printf("OH LALA ON A BIEN MANGE %d REPAS CHACUN\n", philo->nb_eat);
+			printf("HOLA IL EST MORT LA %d\n", philo->index);
 			break ;
 		}
+		eating(philo->prog_in, philo);
 		im_printing(philo->prog_in, philo, "is sleeping");
 		my_usleep(philo->prog_in->time_to_sleep);
+		if (check_meal_count(philo))
+		{
+			philo->prog_in->count_philo_rassasied++;
+			break ;
+		}
 		im_printing(philo->prog_in, philo, "is thinking");
 	}
 	return (NULL);
 }
+
 
 int create_and_join(t_prog *prog, t_philo *philo)
 {
@@ -161,6 +169,7 @@ int create_and_join(t_prog *prog, t_philo *philo)
 		}
 		i++;
 	}
+	death_trigger(prog, philo);
 	i = 0;
 	while (i < nb_thread)
 	{
@@ -170,7 +179,6 @@ int create_and_join(t_prog *prog, t_philo *philo)
 	free(all_philo);
 	return (OK);
 }
-
 
 void	destroy_mutex(t_prog *prog, t_philo *philo)
 {
@@ -214,18 +222,11 @@ int	philo_assignment(t_prog *prog, t_philo **philo)
 		(*philo)[i].flag = 0;
 		(*philo)[i].prog_in = prog;
 		(*philo)[i].fork = fork;
-		(*philo)[i].last_meal = time_calculator();
+		(*philo)[i].last_meal = prog->start;
 		i++;
-	//	printf("Done\n");
 	}
 	return (OK);
 }
-
-// int	philo_init(t_prog *prog, t_philo **philo)
-// {
-// 	int i = 0;
-// 	return (OK);
-// }
 
 int	init_tab_mutex(t_prog *prog)
 {
@@ -250,6 +251,7 @@ int	prog_init(char **argv, t_prog *prog)
 	prog->time_to_sleep = ft_atoi(argv[4]);
 	prog->start = time_calculator();
 	prog->count_philo_rassasied = 0;
+	prog->rassasied = 0;
 	if (argv[5])
 		prog->nbr_must_eat = ft_atoi(argv[5]);
 	else 
@@ -268,14 +270,11 @@ int main (int argc, char **argv)
 	if (check_errors(argc, argv))
 		return (1);
 	prog_init(argv, &prog);
-	//philo_init(&prog, &philo);
 	philo_assignment(&prog, &philo);
 	create_and_join(&prog, philo);
 	destroy_mutex(&prog, philo);
-	// printf("Checkpoint\n");
 	free(philo->fork);
 	free(philo);
 	//system("leaks philo");
-	//exit(0);
 	return (0);
 }
