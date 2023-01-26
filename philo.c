@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 12:27:23 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/24 13:59:40 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/01/26 14:46:49 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,22 +85,10 @@ void mutex_security(t_prog *prog, t_philo *philo, int flag)
 	pthread_mutex_unlock(&philo->fork[philo->r_fork]);
 }
 
-void	cooking_master(t_philo *philo)
-{
-	if (philo->prog_in->count_philo_rassasied == philo->prog_in->nbr_philo)
-	{
-		printf("OH LALA ON A BIEN MANGE %d REPAS CHACUN\n", philo->nb_eat);
-	}
-		
-}
-
 int	check_meal_count(t_philo *philo)
 {
 	if (philo->nb_eat == philo->prog_in->nbr_must_eat)
-	{
-		philo->prog_in->count_philo_rassasied++;
 		return (ERROR);
-	}
 	return (OK);
 }
 
@@ -111,8 +99,8 @@ void	eating(t_prog *prog, t_philo *philo)
 	mutex_security(prog, philo, 0);
 	//printf ("Philo %d fourchette gauche : %d et droite : %d\n", philo->index, philo->l_fork, philo->r_fork);
 	pthread_mutex_lock(&philo->prog_in->mutexes[EAT]);
-	my_usleep(prog->time_to_eat);
 	im_printing(prog, philo, "is eating");
+	my_usleep(prog->time_to_eat);
 	pthread_mutex_unlock(&philo->prog_in->mutexes[EAT]);
 	philo->last_meal = time_calculator();
 	philo->nb_eat++;
@@ -133,9 +121,16 @@ void	*routine(void *philo_arg)
 		eating(philo->prog_in, philo);
 		if (check_meal_count(philo))
 		{
+		//	pthread_mutex_lock((&philo->prog_in->mutexes[RASSASIED]));
 			philo->prog_in->count_philo_rassasied++;
+		//	pthread_mutex_unlock((&philo->prog_in->mutexes[RASSASIED]));
+			if (philo->prog_in->count_philo_rassasied >= philo->prog_in->nbr_philo)
+				printf("OH LALA ON A BIEN MANGE %d REPAS CHACUN\n", philo->nb_eat);
 			break ;
 		}
+		im_printing(philo->prog_in, philo, "is sleeping");
+		my_usleep(philo->prog_in->time_to_sleep);
+		im_printing(philo->prog_in, philo, "is thinking");
 	}
 	return (NULL);
 }
@@ -166,7 +161,6 @@ int create_and_join(t_prog *prog, t_philo *philo)
 		}
 		i++;
 	}
-	cooking_master(philo);
 	i = 0;
 	while (i < nb_thread)
 	{
