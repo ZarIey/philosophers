@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 07:20:56 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/20 18:01:56 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/01/27 17:55:43 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	is_num(char *str)
 {
 	int	i;
-	
+
 	i = 0;
 	while (str[i])
 	{
@@ -26,7 +26,7 @@ int	is_num(char *str)
 	return (0);
 }
 
-int check_errors_set(int argc, char **argv)
+int	check_errors_set(int argc, char **argv)
 {
 	int	i;
 
@@ -44,7 +44,7 @@ int check_errors_set(int argc, char **argv)
 	return (0);
 }
 
-int check_errors(int argc, char **argv)
+int	check_errors(int argc, char **argv)
 {
 	if (check_errors_set(argc, argv))
 	{
