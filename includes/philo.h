@@ -5,19 +5,20 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/12 06:45:21 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/27 17:44:29 by ctardy           ###   ########.fr       */
+/*   Created: 2023/01/31 14:07:43 by ctardy            #+#    #+#             */
+/*   Updated: 2023/01/31 14:13:33 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H_
-# define PHILO_H_
+#ifndef PHILO_H
+# define PHILO_H
+
+# include "../includes/libft/libft.h"
 
 # include <pthread.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <sys/time.h>
-# include "../includes/libft/libft.h"
 
 typedef enum e_return
 {
@@ -31,6 +32,7 @@ typedef enum e_mutex
 	EAT,
 	DIE,
 	RASSASIED,
+	FORK,
 	MAX_MU,
 }	t_mutex;
 
@@ -69,7 +71,7 @@ void	my_usleep(long int time);
 
 // routine
 
-int		create_and_join(t_prog *prog, t_philo *philo);
+int		create_and_join(t_prog *prog, t_philo *philo, int nb_thread, int i);
 
 // death
 
@@ -87,7 +89,7 @@ void	im_printing_death(t_prog *prog, t_philo *philo, char *sentence);
 
 int		init_tab_mutex(t_prog *prog);
 int		prog_init(char **argv, t_prog *prog);
-int		philo_assignment(t_prog *prog, t_philo **philo);
+int		philo_assignment(t_prog *prog, t_philo **philo, int nb_thread, int i);
 
 //parsing
 
