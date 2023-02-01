@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 16:03:55 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/27 17:47:10 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/01/31 12:40:36 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	my_usleep(long int time)
 {
 	long	now;
 
-	now = time_calculator(void);
+	now = time_calculator();
 	while (time_calculator() <= now + time)
 		usleep(50);
 }
@@ -46,18 +46,21 @@ void	destroy_mutex(t_prog *prog, t_philo *philo)
 
 int	main(int argc, char **argv)
 {
+	int		i;
+	int		nb_thread;
 	t_prog	prog;
 	t_philo	*philo;
 
+	i = 0;
 	philo = NULL;
 	if (check_errors(argc, argv))
 		return (1);
 	prog_init(argv, &prog);
-	philo_assignment(&prog, &philo);
-	create_and_join(&prog, philo);
+	nb_thread = prog.nbr_philo;
+	philo_assignment(&prog, &philo, nb_thread, i);
+	create_and_join(&prog, philo, nb_thread, i);
 	destroy_mutex(&prog, philo);
 	free(philo->fork);
 	free(philo);
-	//system("leaks philo");
 	return (0);
 }

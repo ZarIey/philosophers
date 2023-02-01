@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 12:27:23 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/27 17:50:21 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/01/31 12:46:13 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,20 @@ void	mutex_security(t_prog *prog, t_philo *philo, int flag)
 	if (!flag)
 	{	
 		pthread_mutex_lock(&philo->fork[philo->l_fork]);
+		pthread_mutex_lock(&philo->prog_in->mutexes[FORK]);
 		prog->count_fork++;
-		im_printing(prog, philo, "has taken a fork");
+		pthread_mutex_unlock(&philo->prog_in->mutexes[FORK]);
+		im_printing(prog, philo, "has taken a fork 🍴");
 		if (philo->prog_in->nbr_philo < 2)
 		{
 			pthread_mutex_unlock(&philo->fork[philo->l_fork]);
 			return ;
 		}
 		pthread_mutex_lock(&philo->fork[philo->r_fork]);
+		pthread_mutex_lock(&philo->prog_in->mutexes[FORK]);
 		prog->count_fork++;
-		im_printing(prog, philo, "has taken a fork");
+		pthread_mutex_unlock(&philo->prog_in->mutexes[FORK]);
+		im_printing(prog, philo, "has taken a fork 🍴");
 		return ;
 	}
 	pthread_mutex_unlock(&philo->fork[philo->l_fork]);
@@ -36,10 +40,15 @@ void	mutex_security(t_prog *prog, t_philo *philo, int flag)
 int	eating(t_prog *prog, t_philo *philo)
 {
 	mutex_security(prog, philo, 0);
+	pthread_mutex_lock(&philo->prog_in->mutexes[FORK]);
 	if (prog->count_fork < 2)
+	{
+		pthread_mutex_unlock(&philo->prog_in->mutexes[FORK]);
 		return (ERROR);
+	}
+	pthread_mutex_unlock(&philo->prog_in->mutexes[FORK]);
 	pthread_mutex_lock(&philo->prog_in->mutexes[EAT]);
-	im_printing(prog, philo, "is eating");
+	im_printing(prog, philo, "is eating 🍽");
 	philo->last_meal = time_calculator();
 	philo->nb_eat++;
 	pthread_mutex_unlock(&philo->prog_in->mutexes[EAT]);
@@ -61,7 +70,7 @@ void	*routine(void *philo_arg)
 			break ;
 		if (eating(philo->prog_in, philo))
 			break ;
-		im_printing(philo->prog_in, philo, "is sleeping");
+		im_printing(philo->prog_in, philo, "is sleeping 🛌");
 		my_usleep(philo->prog_in->time_to_sleep);
 		if (check_meal_count(philo))
 		{
@@ -72,19 +81,15 @@ void	*routine(void *philo_arg)
 		}
 		if (check_if_rassasied(philo))
 			break ;
-		im_printing(philo->prog_in, philo, "is thinking");
+		im_printing(philo->prog_in, philo, "is thinking 🧐");
 	}
 	return (NULL);
 }
 
-int	create_and_join(t_prog *prog, t_philo *philo)
+int	create_and_join(t_prog *prog, t_philo *philo, int nb_thread, int i)
 {
-	int			i;
-	int			nb_thread;
 	pthread_t	*all_philo;
 
-	i = 0;
-	nb_thread = prog->nbr_philo;
 	all_philo = malloc (sizeof(pthread_t) * nb_thread);
 	if (all_philo == NULL)
 		return (ERROR);
@@ -105,10 +110,7 @@ int	create_and_join(t_prog *prog, t_philo *philo)
 	death_trigger(prog, philo);
 	i = 0;
 	while (i < nb_thread)
-	{
-		pthread_join(all_philo[i], NULL);
-		i++;
-	}
+		pthread_join(all_philo[i++], NULL);
 	free(all_philo);
 	return (OK);
 }

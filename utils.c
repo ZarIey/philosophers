@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 12:18:33 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/27 17:55:05 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/01/31 12:38:48 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,16 @@ void	im_printing(t_prog *prog, t_philo *philo, char *sentence)
 {
 	pthread_mutex_lock(&prog->mutexes[PRINT]);
 	if (!check_if_dead(prog))
-		printf("%ld %d %s\n", (time_calculator() - prog->start), philo->index, sentence);
+		printf("%ld %d %s\n", (time_calculator() - prog->start), \
+		philo->index, sentence);
 	pthread_mutex_unlock(&prog->mutexes[PRINT]);
 }
 
 void	im_printing_death(t_prog *prog, t_philo *philo, char *sentence)
 {
 	pthread_mutex_lock(&prog->mutexes[PRINT]);
-	printf("%ld %d %s\n", (time_calculator() - prog->start), philo->index, sentence);
+	printf("%ld %d %s\n", (time_calculator() - prog->start), \
+	philo->index, sentence);
 	pthread_mutex_unlock(&prog->mutexes[PRINT]);
 }
 

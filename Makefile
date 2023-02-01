@@ -21,7 +21,7 @@ OBJS_B = $(addprefix $(OBJS_B_DIR), $(addsuffix .o, $(FILES_B)))
 LIBFT_DIR = ./includes/libft/
 LIBFT = $(addprefix $(LIBFT_DIR), libft.a)
 CC		= gcc
-CFLAGS	= -Wall -Werror -Wextra -g -fsanitize=address
+CFLAGS	= -Wall -Werror -Wextra -g -O3 -fsanitize=thread
 
 LIBRARIES = -lft -L$(LIBFT_DIR)
 HEADERS = -I$(LIBFT_DIR)

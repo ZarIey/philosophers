@@ -6,23 +6,19 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 12:14:56 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/27 17:54:06 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/01/31 12:18:00 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/philo.h"
 
-int	philo_assignment(t_prog *prog, t_philo **philo)
+int	philo_assignment(t_prog *prog, t_philo **philo, int nb_thread, int i)
 {
-	int				i;
-	int				nb_thread;
 	pthread_mutex_t	*fork;
 
-	i = 0;
 	*philo = malloc(sizeof(t_philo) * prog->nbr_philo);
 	if (philo == NULL)
 		return (ERROR);
-	nb_thread = prog->nbr_philo;
 	fork = malloc(sizeof(pthread_mutex_t) * prog->nbr_philo);
 	while (i < prog->nbr_philo)
 		pthread_mutex_init(&fork[i++], NULL);
@@ -70,6 +66,7 @@ int	prog_init(char **argv, t_prog *prog)
 	prog->count_philo_rassasied = 0;
 	prog->rassasied = 0;
 	prog->count_fork = 0;
+	prog->dead = 0;
 	if (argv[5])
 		prog->nbr_must_eat = ft_atoi(argv[5]);
 	else
