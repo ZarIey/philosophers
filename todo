@@ -1,5 +1,0 @@
-- Testez avec 1 800 200 200. Le philosophe ne devrait pas manger et devrait mourir. (OK)
-- Testez avec 5 800 200 200. Aucun philosophe ne devrait mourir.(OK)
-- Testez avec 5 800 200 200 7. (OK)
-- Testez avec 4 410 200 200. Aucun philosophe ne devrait mourir. (OK)
-- Testez avec 4 310 200 100. Un philosophe devrait mourir. (OK)
