@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 12:27:23 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/31 12:46:13 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/02/03 12:40:55 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	*routine(void *philo_arg)
 	t_philo	*philo;
 
 	philo = philo_arg;
-	if (philo->index % 2)
+	if (philo->prog_in->nbr_philo > 1 && philo->index % 2)
 		my_usleep(philo->prog_in->time_to_eat);
 	while ("Drill")
 	{
@@ -98,19 +98,16 @@ int	create_and_join(t_prog *prog, t_philo *philo, int nb_thread, int i)
 		if (pthread_create(&all_philo[i], NULL, routine, &philo[i]))
 		{
 			while (i > 0)
-			{
-				pthread_join(all_philo[i], NULL);
-				i--;
-				free(all_philo);
-				return (ERROR);
-			}
+				pthread_detach(all_philo[i--]);
+			free(all_philo);
+			return (ERROR);
 		}
 		i++;
 	}
 	death_trigger(prog, philo);
 	i = 0;
 	while (i < nb_thread)
-		pthread_join(all_philo[i++], NULL);
+		pthread_detach(all_philo[i++]);
 	free(all_philo);
 	return (OK);
 }
