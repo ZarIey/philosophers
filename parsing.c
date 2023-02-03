@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 07:20:56 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/31 14:25:52 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/02/03 12:51:02 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int	is_num(char *str)
 	while (str[i])
 	{
 		if (str[i] < 48 || str[i] > 57)
-			return (1);
+			return (ERROR);
 		i++;
 	}
-	return (0);
+	return (OK);
 }
 
 int	check_errors_set(int argc, char **argv)
@@ -32,25 +32,26 @@ int	check_errors_set(int argc, char **argv)
 
 	i = 1;
 	if (argc < 5 || argc > 6)
-		return (1);
-	if ((ft_atoi(argv[1]) < 1) || (ft_atoi(argv[2]) <= 60) || \
-	(ft_atoi(argv[3]) < 60) || (ft_atoi(argv[4]) < 60))
+		return (ERROR);
+	if (argc > 5 && ft_atoi(argv[5]) == 0)
+		return (2);
+	if ((ft_atoi(argv[1]) < 1) || (ft_atoi(argv[2]) <= 1) || \
+	(ft_atoi(argv[3]) < 1) || (ft_atoi(argv[4]) < 1))
 		return (1);
 	while (argv[i])
 	{
 		if (is_num(argv[i]))
-			return (1);
+			return (ERROR);
 		i++;
 	}
-	return (0);
+	return (OK);
 }
 
 int	check_errors(int argc, char **argv)
 {
+	if (check_errors_set(argc, argv) == 2)
+		return (2);
 	if (check_errors_set(argc, argv))
-	{
-		printf ("On a un soucis d'arguments ! 🚔 \n");
-		return (1);
-	}
-	return (0);
+		return (ERROR);
+	return (OK);
 }
