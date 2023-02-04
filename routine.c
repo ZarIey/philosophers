@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 12:27:23 by ctardy            #+#    #+#             */
-/*   Updated: 2023/02/03 12:40:55 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/02/04 16:55:06 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	eating(t_prog *prog, t_philo *philo)
 	philo->last_meal = time_calculator();
 	philo->nb_eat++;
 	pthread_mutex_unlock(&philo->prog_in->mutexes[EAT]);
-	my_usleep(prog->time_to_eat);
+	my_usleep(philo->prog_in, prog->time_to_eat);
 	mutex_security(prog, philo, 1);
 	return (OK);
 }
@@ -63,7 +63,7 @@ void	*routine(void *philo_arg)
 
 	philo = philo_arg;
 	if (philo->prog_in->nbr_philo > 1 && philo->index % 2)
-		my_usleep(philo->prog_in->time_to_eat);
+		my_usleep(philo->prog_in, philo->prog_in->time_to_eat);
 	while ("Drill")
 	{
 		if (check_if_dead(philo->prog_in))
@@ -71,7 +71,7 @@ void	*routine(void *philo_arg)
 		if (eating(philo->prog_in, philo))
 			break ;
 		im_printing(philo->prog_in, philo, "is sleeping 🛌");
-		my_usleep(philo->prog_in->time_to_sleep);
+		my_usleep(philo->prog_in, philo->prog_in->time_to_sleep);
 		if (check_meal_count(philo))
 		{
 			pthread_mutex_lock(&philo->prog_in->mutexes[RASSASIED]);
@@ -98,7 +98,7 @@ int	create_and_join(t_prog *prog, t_philo *philo, int nb_thread, int i)
 		if (pthread_create(&all_philo[i], NULL, routine, &philo[i]))
 		{
 			while (i > 0)
-				pthread_detach(all_philo[i--]);
+				pthread_join(all_philo[i--], NULL);
 			free(all_philo);
 			return (ERROR);
 		}
@@ -107,7 +107,7 @@ int	create_and_join(t_prog *prog, t_philo *philo, int nb_thread, int i)
 	death_trigger(prog, philo);
 	i = 0;
 	while (i < nb_thread)
-		pthread_detach(all_philo[i++]);
+		pthread_join(all_philo[i++], NULL);
 	free(all_philo);
 	return (OK);
 }

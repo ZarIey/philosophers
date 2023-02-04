@@ -4,7 +4,6 @@ FILES	= 	routine	\
 			init	\
 			utils	\
 			death	\
-			minilib	\
 			main	\
 
 SRCS_DIR = ./

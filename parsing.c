@@ -6,11 +6,39 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 07:20:56 by ctardy            #+#    #+#             */
-/*   Updated: 2023/02/04 12:06:37 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/02/04 14:00:49 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/philo.h"
+
+int	mini_atoi(const char *str)
+{
+	int	i;
+	int	sign;
+	int	result;
+
+	i = 0;
+	sign = 1;
+	result = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign = -sign;
+		i++;
+	}
+	while (str[i])
+	{
+		if (!(str[i] >= 48 && str[i] <= 57))
+			return (sign * result);
+		else
+			result = result * 10 + str[i] - '0';
+		i++;
+	}
+	return (sign * result);
+}
 
 int	is_num(char *str)
 {
