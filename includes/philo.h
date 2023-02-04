@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 14:07:43 by ctardy            #+#    #+#             */
-/*   Updated: 2023/02/04 13:55:42 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/02/04 16:18:47 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct s_philo
 // main
 
 long	time_calculator(void);
-void	my_usleep(long int time);
+void	my_usleep(t_prog *prog, long int time);
 
 // routine
 
