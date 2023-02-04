@@ -6,19 +6,18 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 14:07:43 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/31 14:13:33 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/02/04 13:55:42 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-# include "../includes/libft/libft.h"
-
 # include <pthread.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <stdlib.h>
 
 typedef enum e_return
 {
@@ -93,6 +92,7 @@ int		philo_assignment(t_prog *prog, t_philo **philo, int nb_thread, int i);
 
 //parsing
 
+int		mini_atoi(const char *str);
 int		check_errors(int argc, char **argv);
 
 #endif
