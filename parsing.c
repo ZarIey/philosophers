@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 07:20:56 by ctardy            #+#    #+#             */
-/*   Updated: 2023/02/03 12:51:02 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/02/04 12:06:37 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ int	check_errors_set(int argc, char **argv)
 	i = 1;
 	if (argc < 5 || argc > 6)
 		return (ERROR);
-	if (argc > 5 && ft_atoi(argv[5]) == 0)
+	if (argc > 5 && mini_atoi(argv[5]) == 0)
 		return (2);
-	if ((ft_atoi(argv[1]) < 1) || (ft_atoi(argv[2]) <= 1) || \
-	(ft_atoi(argv[3]) < 1) || (ft_atoi(argv[4]) < 1))
+	if ((mini_atoi(argv[1]) < 1) || (mini_atoi(argv[2]) <= 1) || \
+	(mini_atoi(argv[3]) < 1) || (mini_atoi(argv[4]) < 1))
 		return (1);
 	while (argv[i])
 	{

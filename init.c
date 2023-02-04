@@ -6,7 +6,7 @@
 /*   By: ctardy <ctardy@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 12:14:56 by ctardy            #+#    #+#             */
-/*   Updated: 2023/01/31 12:18:00 by ctardy           ###   ########.fr       */
+/*   Updated: 2023/02/04 12:02:00 by ctardy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,17 @@ int	init_tab_mutex(t_prog *prog)
 
 int	prog_init(char **argv, t_prog *prog)
 {
-	prog->nbr_philo = ft_atoi(argv[1]);
-	prog->time_to_die = ft_atoi(argv[2]);
-	prog->time_to_eat = ft_atoi(argv[3]);
-	prog->time_to_sleep = ft_atoi(argv[4]);
+	prog->nbr_philo = mini_atoi(argv[1]);
+	prog->time_to_die = mini_atoi(argv[2]);
+	prog->time_to_eat = mini_atoi(argv[3]);
+	prog->time_to_sleep = mini_atoi(argv[4]);
 	prog->start = time_calculator();
 	prog->count_philo_rassasied = 0;
 	prog->rassasied = 0;
 	prog->count_fork = 0;
 	prog->dead = 0;
 	if (argv[5])
-		prog->nbr_must_eat = ft_atoi(argv[5]);
+		prog->nbr_must_eat = mini_atoi(argv[5]);
 	else
 		prog->nbr_must_eat = -1;
 	if (init_tab_mutex(prog))
