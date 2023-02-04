@@ -4,6 +4,7 @@ FILES	= 	routine	\
 			init	\
 			utils	\
 			death	\
+			minilib	\
 			main	\
 
 SRCS_DIR = ./
@@ -18,45 +19,43 @@ SRCS_B = $(addprefix $(SRCS_B_DIR), $(addsuffix .c, $(FILES_B)))
 OBJS_B_DIR = ./bonus/
 OBJS_B = $(addprefix $(OBJS_B_DIR), $(addsuffix .o, $(FILES_B)))
 
-LIBFT_DIR = ./includes/libft/
-LIBFT = $(addprefix $(LIBFT_DIR), libft.a)
+#LIBFT_DIR = ./includes/libft/
+#LIBFT = $(addprefix $(LIBFT_DIR), libft.a)
 CC		= gcc
-CFLAGS	= -Wall -Werror -Wextra -g -O3 -fsanitize=thread
+CFLAGS	= -Wall -Werror -Wextra -g -O3 #-fsanitize=thread
 
-LIBRARIES = -lft -L$(LIBFT_DIR)
-HEADERS = -I$(LIBFT_DIR)
+#LIBRARIES = -lft -L #$(LIBFT_DIR)
+#HEADERS = -I #$(LIBFT_DIR)
 .c.o		:
-				${CC} ${CFLAGS} ${HEADERS} -c $< -o ${<:.c=.o}
+				${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
-${NAME} 	:	$(LIBFT) ${OBJS}
-				@${CC} ${CFLAGS} ${LIBRARIES} ${OBJS} -o $@
+${NAME} 	:	${OBJS}
+				@${CC} ${CFLAGS} ${OBJS} -o $@
 				@echo "\033[32m\n🍽  Philosophers Compiled !\n"
 
+#$(LIBFT)	:	
+#				@echo "\033[32m\n🧠 Compiling ... \n\033[33;1m"
+#				@$(MAKE) -C $(LIBFT_DIR)
+#				@echo "\033[32m\n😎 Libft Compiled !\n\033[33;1m"
 
-$(LIBFT)	:	
-				@echo "\033[32m\n🧠 Compiling ... \n\033[33;1m"
-				@$(MAKE) -C $(LIBFT_DIR)
-				@echo "\033[32m\n😎 Libft Compiled !\n\033[33;1m"
-
-${BONUS}	:	$(LIBFT) ${OBJS_B}
-				@${CC} ${CFLAGS} ${LIBRARIES} ${OBJS_B} -o $@
+${BONUS}	:	${OBJS_B}
+				@${CC} ${CFLAGS} ${OBJS_B} -o $@
 				@echo "\033[32m\n📊 Checker Compiled !\n"
 				
 all			:	${NAME}
 
 bonus		:	${NAME} ${BONUS}
 
-
 clean		:	
 				@echo "\033[32m\n🧻 Clean ... \n\033[33;1m"
 				@rm -rf ${OBJS} ${OBJS_B}
-				@$(MAKE) clean -C $(LIBFT_DIR)
+#				@$(MAKE) clean -C $(LIBFT_DIR)
 				@echo "\033[32;1m\n🗑  Deleting all '.o' files !\n"
 
 fclean 		:	clean
 				@echo "\033[32m\n🧻 Fclean ... \n\033[33;1m"
 				@rm -rf ${NAME} ${BONUS}
-				@$(MAKE) fclean -C $(LIBFT_DIR)
+#				@$(MAKE) fclean -C $(LIBFT_DIR)
 				@echo "\033[32;1m\n🗑  Deleting everything !\n"
 
 re 			:	fclean all
